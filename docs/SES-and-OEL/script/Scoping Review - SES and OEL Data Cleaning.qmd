@@ -1,0 +1,716 @@
+---
+title: "Scoping Review - SES and OEL Data Cleaning"
+format: html
+editor: visual
+---
+
+##### Load Libraries
+
+```{r}
+library(here)
+library(rio)
+library(tidyverse)
+library(janitor)
+library(ggthemes)
+library(gghighlight)
+library(tidyr)
+library(readxl)
+library(RColorBrewer)
+library(knitr)
+library(kableExtra)
+library(writexl)
+```
+
+### Load numerical data
+
+```{r}
+here("data", "FullDataSESOEL22024.xlsx")
+ndf1 <- read_excel("/Users/daniellejones/Desktop/Scoping Review Coding/Scoping Review - Qualtrics Data Cleaning/data/FullDataSESOEL22024.xlsx")
+
+ndf1 <- ndf1 %>%
+  characterize() %>%
+  clean_names()
+```
+
+## Load choice data
+
+```{r}
+here("data", "FullDataSESOELChoice.xlsx")
+cdf1 <- read_excel("/Users/daniellejones/Desktop/Scoping Review Coding/Scoping Review - Qualtrics Data Cleaning/data/FullDataSESOELChoice.xlsx")
+
+cdf1 <- cdf1 %>%
+  characterize() %>%
+  clean_names()
+```
+
+## Take away question row - numerical data
+
+```{r}
+ndf2 <- ndf1 %>%
+  slice(-1, ) 
+```
+
+## Take away question row - choice data
+
+```{r}
+cdf2 <- cdf1 %>%
+  slice(-1, ) 
+```
+
+## Creating individual data sets for each question - numerical data
+
+```{r}
+nq2 <- ndf2 %>%
+  select("row_id", "q1", "q2")
+nq3 <- ndf2 %>%
+  select("row_id", "q1", "q3", "q3_44_text")
+nq4 <- ndf2 %>%
+  select("row_id", "q1", "q4")
+nq5 <- ndf2 %>%
+  select("row_id", "q1", "q5")
+nq6 <- ndf2 %>%
+  select("row_id", "q1", "q6", "q6_3_text", "q6a", "q6a_6_text")
+nq7 <- ndf2 %>%
+  select("row_id", "q1", "q7", "q6_3_text")
+nq8 <- ndf2 %>%
+  select("row_id", "q1", "q8", "q8_5_text", "q8_6_text")
+nq9 <- ndf2 %>%
+  select("row_id", "q1", "q9", "q9_3_text", "q9_4_text")
+nq10 <- ndf2 %>%
+  select("row_id", "q1", "q10", "q10_5_text", "q10_west", "q10_midwest", "q10_south", "q10_northeast")
+nq11 <- ndf2 %>%
+  select("row_id", "q1", "q11", "q11_1_text", "q11_3_text")
+nq12 <- ndf2 %>%
+  select("row_id", "q1", "q12", "q12_1_text", "q12_2_text", "q12_3_text", "q12_4_text", "q12_5_text", 
+         "q12_6_text", "q12_7_text", "q12_8_text")
+nq13 <- ndf2 %>%
+  select("row_id", "q1", "q13", "q13_13_text", "q13_14_text", "q13_15_text")
+nq14 <- ndf2 %>%
+  select("row_id", "q1", "q14")
+nq15 <- ndf2 %>%
+  select("row_id", "q1", "q15", "q15_44", "q15_7_text_45", "q15_8_text", "q15_47", "q15_7_text_48",
+         "q15_6_text", "q15_7_text")
+nq16 <- ndf2 %>%
+  select("row_id", "q1", "q16", "q16_1_text", "q16_2_text", "q16_3_text", "q16_4_text", "q16_5_text",
+          "q16_6_text", "q16_7_text", "q16_8_text")
+nq17 <- ndf2 %>%
+  select("row_id", "q1", "q17", "q17_1_text", "q17_2_text", "q17_3_text", "q17_4_text", "q17_5_text",
+          "q17_6_text", "q17_7_text", "q17_8_text")
+nq18 <- ndf2 %>%
+  select("row_id", "q1", "q18", "q18_6_text", "q18_7_text")
+nq19 <- ndf2 %>%
+  select("row_id", "q1", "q19")
+nq20 <- ndf2 %>%
+  select("row_id", "q1", "q20", "q20_6_text")
+nq21 <- ndf2 %>%
+  select("row_id", "q1", "q21")
+nq22 <- ndf2 %>%
+  select("row_id", "q1", "q22", "q22_1_text", "q22_2_text", "q22_3_text", "q22_4_text")
+nq23 <- ndf2 %>%
+  select("row_id", "q1", "q23", "q23_4_text")
+nq24 <- ndf2 %>%
+  select("row_id", "q1", "q24")
+nq25 <- ndf2 %>%
+  select("row_id", "q1", "q25")
+nq26 <- ndf2 %>%
+  select("row_id", "q1", "q26", "q26_b_1_text", "q26_b_2_text", "q26_b_3_text", "q26_b_4_text",
+         "q26_b_5_text", "q26_b_6_text", "q26_b_7_text")
+nq27 <- ndf2 %>%
+  select("row_id", "q1", "q27", "q27_1_text", "q27_6_text")
+nq28 <- ndf2 %>%
+  select("row_id", "q1", "q28", "q28_1_text", "q28_2_text", "q28_3_text", "q28_4_text", "q28_5_text")
+nq29 <- ndf2 %>%
+  select("row_id", "q1", "q29", "q29_1_text", "q29_4_text")
+nq30 <- ndf2 %>%
+  select("row_id", "q1", "q30", "q30_11_text", "q30_12_text", "q30_13_text")
+nq31 <- ndf2 %>%
+  select("row_id", "q1", "q31", "q31_6_text")
+
+```
+
+## Creating individual data sets for each question - choice data
+
+```{r}
+cq2 <- cdf2 %>%
+  select("row_id", "q1", "q2")
+cq3 <- cdf2 %>%
+  select("row_id", "q1", "q3", "q3_44_text")
+cq4 <- cdf2 %>%
+  select("row_id", "q1", "q4")
+cq5 <- cdf2 %>%
+  select("row_id", "q1", "q5")
+cq6 <- cdf2 %>%
+  select("row_id", "q1", "q6", "q6_3_text", "q6a", "q6a_6_text")
+cq7 <- cdf2 %>%
+  select("row_id", "q1", "q7", "q6_3_text")
+cq8 <- cdf2 %>%
+  select("row_id", "q1", "q8", "q8_5_text", "q8_6_text")
+cq9 <- cdf2 %>%
+  select("row_id", "q1", "q9", "q9_3_text", "q9_4_text")
+cq10 <- cdf2 %>%
+  select("row_id", "q1", "q10", "q10_5_text", "q10_west", "q10_midwest", "q10_south", "q10_northeast")
+cq11 <- cdf2 %>%
+  select("row_id", "q1", "q11", "q11_1_text", "q11_3_text")
+cq12 <- cdf2 %>%
+  select("row_id", "q1", "q12", "q12_1_text", "q12_2_text", "q12_3_text", "q12_4_text", "q12_5_text", 
+         "q12_6_text", "q12_7_text", "q12_8_text")
+cq13 <- cdf2 %>%
+  select("row_id", "q1", "q13", "q13_13_text", "q13_14_text", "q13_15_text")
+cq14 <- cdf2 %>%
+  select("row_id", "q1", "q14")
+cq15 <- cdf2 %>%
+  select("row_id", "q1", "q15", "q15_44", "q15_7_text_45", "q15_8_text", "q15_47", "q15_7_text_48",
+         "q15_6_text", "q15_7_text")
+cq16 <- cdf2 %>%
+  select("row_id", "q1", "q16", "q16_1_text", "q16_2_text", "q16_3_text", "q16_4_text", "q16_5_text",
+          "q16_6_text", "q16_7_text", "q16_8_text")
+cq17 <- cdf2 %>%
+  select("row_id", "q1", "q17", "q17_1_text", "q17_2_text", "q17_3_text", "q17_4_text", "q17_5_text",
+          "q17_6_text", "q17_7_text", "q17_8_text")
+cq18 <- cdf2 %>%
+  select("row_id", "q1", "q18", "q18_6_text", "q18_7_text")
+cq19 <- cdf2 %>%
+  select("row_id", "q1", "q19")
+cq20 <- cdf2 %>%
+  select("row_id", "q1", "q20", "q20_6_text")
+cq21 <- cdf2 %>%
+  select("row_id", "q1", "q21")
+cq22 <- cdf2 %>%
+  select("row_id", "q1", "q22", "q22_1_text", "q22_2_text", "q22_3_text", "q22_4_text")
+cq23 <- cdf2 %>%
+  select("row_id", "q1", "q23", "q23_4_text")
+cq24 <- cdf2 %>%
+  select("row_id", "q1", "q24")
+cq25 <- cdf2 %>%
+  select("row_id", "q1", "q25")
+cq26 <- cdf2 %>%
+  select("row_id", "q1", "q26", "q26_b_1_text", "q26_b_2_text", "q26_b_3_text", "q26_b_4_text",
+         "q26_b_5_text", "q26_b_6_text", "q26_b_7_text")
+cq27 <- cdf2 %>%
+  select("row_id", "q1", "q27", "q27_1_text", "q27_6_text")
+cq28 <- cdf2 %>%
+  select("row_id", "q1", "q28", "q28_1_text", "q28_2_text", "q28_3_text", "q28_4_text", "q28_5_text")
+cq29 <- cdf2 %>%
+  select("row_id", "q1", "q29", "q29_1_text", "q29_4_text")
+cq30 <- cdf2 %>%
+  select("row_id", "q1", "q30", "q30_11_text", "q30_12_text", "q30_13_text")
+cq31 <- cdf2 %>%
+  select("row_id", "q1", "q31", "q31_6_text")
+
+```
+
+## Q2 & Q3 - Journals and Publication Years
+
+##### Line Graph of Journal Publication Year
+
+```{r}
+
+cq2_counts <- cq2 %>%
+  rename(year = q2) %>%
+  mutate(year = as.integer(year))
+
+cq2_year_counts <- cq2_counts %>%
+  group_by(year) %>%
+  mutate(year_count = n()) %>%
+  ungroup()
+
+year_plot <-
+  ggplot(cq2_year_counts, aes(x = year, y = year_count)) +
+  geom_point() + 
+  geom_line() +  
+  scale_x_continuous(breaks = seq(1980, 2023, by = 2)) +
+  scale_y_continuous(breaks = seq(0, 8, by = 1), limits = c(0, NA)) +
+  labs(x = "Year", y = "Number of Articles", title = "Publication of SES and OEL Articles Over the Years") +
+  theme(
+    panel.background = element_blank())
+print(year_plot)
+
+```
+
+##### Table of Publication Frequency by Year
+
+```{r}
+year_counts_table_df <- cq2_year_counts %>%
+  distinct(year, .keep_all = TRUE) %>%
+  select(year, year_count) %>%
+  arrange(desc(year)) %>%
+  rename("Year" = "year", "Article Count" = "year_count")
+
+year_counts_prettytable <- knitr::kable(year_counts_table_df, "html") %>%
+  kableExtra::kable_styling(full_width = FALSE)
+
+print(year_counts_prettytable)
+```
+
+##### Table of all publications
+
+```{r}
+cq3_counts <- cq3 %>%
+  mutate(q3 = as.character(q3)) %>%
+  group_by(q3) %>%
+  summarise(q3_count = n()) %>%
+  arrange(desc(q3_count)) %>%
+  rename("Journal" = "q3", "Article Count" = "q3_count")
+
+publications_all_prettytable <- knitr::kable(cq3_counts, "html") %>%
+  kableExtra::kable_styling(full_width = FALSE)
+
+print(publications_all_prettytable)
+
+```
+
+##### Top Journals for Publication Data Prep
+
+```{r}
+nq3_counts <- nq3 %>%
+  rename(journal = q3) %>%
+  mutate(journal = as.integer(journal)) %>% 
+  group_by(journal) %>%
+  mutate(journal = as.character(journal)) %>%
+  mutate(journal_count = n()) %>%
+  summarise(journal_count =n()) 
+
+
+
+```
+
+##### Top Journals for Publication Plot
+
+```{r}
+top_11_journals <- nq3_counts %>%
+   mutate(journal = factor(journal, 
+                            levels = c("10", 
+                                       "6", 
+                                       "15", 
+                                       "33", 
+                                       "14", 
+                                       "24", 
+                                       "35", 
+                                       "12", 
+                                       "4", 
+                                       "18", 
+                                       "43"),
+                            labels = c("Developmental Psychology", 
+                                       "Child Development", 
+                                       "Early Education and Development", 
+                                       "Journal of Speech, Language, and Hearing Research", 
+                                       "Early Childhood Research Quarterly",
+                                       "Journal of Child Language",
+                                       "Language, Speech, and Hearing Services in Schools",
+                                       "Early Child Development and Care",
+                                       "Applied Pscyholinguistics",
+                                       "Infant and Child Development",
+                                       "Topics in Early Childhood Special Education"
+                                       ))) %>%
+  arrange(desc(journal_count)) %>%
+  head(11)
+
+journal_plot <- ggplot(top_11_journals, aes(x = reorder(journal, journal_count), y = journal_count, fill = journal)) +
+  geom_bar(stat = "identity", show.legend = FALSE) +
+  geom_text(aes(label = journal_count), vjust = .5, color = "black", size = 3, hjust = -1) +  
+  labs(x = "", y = "Number of Articles from 1980 - 2023", title = "Journals with Highest Frequency of Publication of Articles About SES and OEL") +
+  scale_y_continuous(breaks = seq(0, 10, by = 1)) +
+  theme_minimal() +
+  theme(panel.grid = element_blank(),
+        plot.title = element_text(hjust = 10),
+         axis.ticks.x = element_line(color = "black")) +
+  coord_flip()
+
+print(journal_plot)
+```
+
+## Q6 - Study Design
+
+##### Separate Quant/Mixed from Quant Description
+
+##### Create frequency count
+
+```{r}
+q6_frequency <- nq6 %>%
+  count(q6)
+```
+
+##### Study Design Bar Chart
+
+```{r}
+methods_bar <- 
+  ggplot(q6_frequency, aes(q6, n, fill = q6)) +
+  geom_bar(stat= "identity", show.legend = FALSE) +
+  geom_text(aes(label = n), vjust = -0.5, size = 3) +
+  labs(title = "Methods Used to Study SES and OEL", 
+       y = "Number of Studies",
+       x ="") +
+  scale_fill_brewer(palette = "Set1") +
+  scale_y_continuous(breaks = c(0,10,20,30,40,50, 60, 70, 80, 90, 100),
+                       limits = c(0,100),
+                       expand = c(0,0))+
+  scale_x_discrete(labels = c("1" = "Quantitative", 
+                              "2" = "Mixed Methods",
+                              "3" = "Other/Unsure")) +
+  theme(
+  panel.background   = element_blank(),
+  axis.line.x        = element_line(color = "black", linewidth = 0.5),
+  axis.line.y        = element_line(color = "black", linewidth = 0.5),
+)
+
+print(methods_bar)
+```
+
+##### Study design percentage
+
+```{r}
+q6_total_count <- sum(q6_frequency$n)
+q6_percent <- q6_frequency %>%
+  mutate(percentage = (n / total_count) * 100)
+
+print(q6_percent)
+```
+
+## Q6a - Quantative Methods Used
+
+##### Selecting 6a column, pivoting long, then pivoting wide, summarizing, percentages
+
+```{r}
+q6a <- nq6 %>%
+  select(row_id, q6a) %>%
+  separate_rows(q6a, sep = ",") 
+
+q6a_wide <- q6a %>%
+  pivot_wider(names_from = q6a, values_from = q6a, values_fn = length, values_fill = 0)
+
+q6a_wide_totals <- q6a_wide %>%
+  adorn_totals("row")
+
+q6a_wide_totals <- q6a_wide_totals %>%
+  rename("Descriptive-Observational" = "1",
+         "Descriptive-Correlational" = "2",
+         "Quasi-Experimental" = "3")
+
+q6a_df <- data.frame(
+  `Descriptive-Observational` = 46,
+  `Descriptive-Correlational` = 57,
+  `Quasi-Experimental` = 6,
+  `Single-Subject` = 0)
+
+print(q6a_df)
+
+```
+
+## Q7 - Data Collection Methods
+
+```{r}
+q7_frequency <- nq7 %>%
+  count(q7)
+
+q7_total_count <- sum(q7_frequency$n)
+q7_percent <- q7_frequency %>%
+  mutate(percentage = round((n / q7_total_count) * 100, digits = 1))
+
+print(q7_percent)
+```
+
+## Q8 - Setting/Context
+
+```{r}
+
+```
+
+## Q9 - Urban/Rural
+
+##### Recode variables to 6 if both urban and rural populations were studied
+
+```{r}
+nq9_6 <- nq9 %>%
+  mutate(q9 = ifelse(lengths(strsplit(q9, ",")) == 2, "6", q9))
+
+q9_6_frequency <- nq9_6 %>%
+  count(q9)
+```
+
+##### Urban/Rural percentage
+
+```{r}
+q9_6_total_count <- sum(q9_6_frequency$n)
+q9_6_percent <- q9_6_frequency %>%
+  mutate(percentage = round((n / q9_6_total_count) * 100, digits = 1))
+
+print(q9_6_percent)
+```
+
+##### Bar graph for urban/rural with both option
+
+```{r}
+urban_rural_bar <- 
+  ggplot(q9_6_frequency, aes(q9, n, fill = q9)) +
+  geom_bar(stat= "identity", show.legend = FALSE) +
+  geom_text(aes(label = n), vjust = -0.5, size = 3) +
+  labs(title = "Urban, Rural, Both", 
+       y = "Number of Studies",
+       x ="") +
+  scale_fill_brewer(palette = "Set1") +
+  scale_y_continuous(breaks = c(0,10,20,30,40,50, 60, 70),
+                       limits = c(0,70),
+                       expand = c(0,0))+
+  scale_x_discrete(labels = c("1" = "Urban", 
+                              "2" = "Rural",
+                              "3" = "Other",
+                              "4" = "Unclear",
+                              "5" = "Unreported",
+                              "6" =" Both Urban & Rural")) +
+  theme(
+  panel.background   = element_blank(),
+  axis.line.x        = element_line(color = "black", linewidth = 0.5),
+  axis.line.y        = element_line(color = "black", linewidth = 0.5),
+)
+
+print(urban_rural_bar)
+```
+
+##### Pivot table longer so each column only has one value
+
+```{r, eval=FALSE}
+nq9_long <- nq9 %>%
+  select(row_id, q1, q9) %>%
+  separate_rows(q9, sep = ",") 
+
+```
+
+## Q10 - Region of the United States
+
+## Q11 - Use and Definition of SES
+
+```{r}
+
+```
+
+## Q12 - Labels
+
+```{r}
+
+```
+
+## Q13 - Measures used to determine SES
+
+```{r}
+
+```
+
+## Q14 - Level of SES Studied
+
+```{r}
+
+```
+
+## Q15 - 5 Domains
+
+## Q16 - Labels
+
+## Q17 - Definition of Labels
+
+## Q18 - Data collection tool used to measure OEL
+
+## Q19 - Analytical Approaches
+
+## Q20 - How SES was used in analysis
+
+##### Pivoting data long then wide to capture columns with multiple data pieces
+
+```{r}
+q20_long <- nq20 %>%
+  select(row_id, q20) %>%
+  separate_rows(q20, sep = ",") 
+
+q20_wide <- q20_long %>%
+  pivot_wider(names_from = q20, values_from = q20, values_fn = length) %>%
+  select(row_id, `1`, `2`, `3`, `4`, `5`) %>%
+  mutate(across(`1`:`5`, ~replace(., is.na(.), 0)))
+
+
+```
+
+##### Isolating columns that used SES in more than one way
+
+```{r}
+q20_multiple_values <- nq20 %>%
+  filter(rowSums(across(where(is.character), ~grepl(",", ., fixed = TRUE))) > 0)
+
+q20_multiple_values_with_labels <- q20_multiple_values %>%
+  mutate(label = case_when(
+    q20 == "1,2" ~ "inclusion and control",
+    q20 == "1,4" ~ "inclusion and moderator",
+    q20 == "1,5" ~ "inclusion and independent variable",
+    q20 == "2,5" ~ "control and independent")
+  )
+
+q20_multiple_count <- q20_multiple_values_with_labels %>%
+  count(q20)
+
+print(q20_multiple_count)
+```
+
+##### Isolating columns that used SES in one way
+
+```{r}
+q20_single_value <- nq20 %>%
+  filter(!str_detect(q20, ","))
+
+q20_single_count <- q20_single_value %>%
+  count(q20)
+
+print(q20_single_count)
+```
+
+##### Combining data sets Q20
+
+```{r}
+q20_combined_data <- bind_rows(q20_single_count, q20_multiple_count)
+```
+
+##### Bar chart for Q20
+
+```{r}
+ggplot(q20_combined_data, aes(x = q20, y = n)) +
+  geom_bar(stat = "identity", fill = "skyblue") +
+  labs(title = "Bar Chart of q20 Counts",
+       x = "q20 Categories",
+       y = "Count") +
+  scale_x_discrete(labels = c("1" = "Inclusion/Exclusion", 
+                              "2" = "Covariate/Control", 
+                              "3" = "Mediator", 
+                              "4" = "Moderator", 
+                              "5" = "Independent Variable", 
+                              "6" = "Unclear",
+                              "1,2" = "Inclusion & Control", 
+                              "1,4" = "Inclusion and Moderator", 
+                              "1,5" = "Inclusion and Ind. Variable", 
+                              "2,5" = "Control and Ind. Variable")) +
+  geom_text(aes(label = n), vjust = -0.5, size = 3) +
+  labs(title = "Bar Chart of q20 Counts",
+       x = "q20 Categories",
+       y = "Count") +
+   theme(axis.text.x = element_text(angle = 45, hjust = 1))
+```
+
+## Q22 - Inclusion & Exclusion Criteria
+
+```{r}
+
+```
+
+## Q23 - Enrollment in Head Start
+
+##### Head Start Bar Chart
+
+```{r}
+q23_frequency <- nq23 %>%
+  count(q23) 
+
+headstart_bar <- 
+  ggplot(q23_frequency, aes(q23, n, fill = q23)) +
+  geom_bar(stat= "identity", show.legend = FALSE) +
+  geom_text(aes(label = n), vjust = -0.5, size = 3) +
+  labs(title = "Participant Enrollment in Head Start", 
+       y = "Number of Studies",
+       x ="") +
+  scale_fill_brewer(palette = "Set1") +
+  scale_y_continuous(breaks = c(0,10,20,30,40,50, 60),
+                       limits = c(0,60),
+                       expand = c(0,0))+
+  scale_x_discrete(labels = c("1" = "Yes - All participants", 
+                              "2" = "Some participants - not all",
+                              "3" = "No",
+                              "4" = "Unclear")) +
+  theme(
+  panel.background   = element_blank(),
+  axis.line.x        = element_line(color = "black", linewidth = 0.5),
+  axis.line.y        = element_line(color = "black", linewidth = 0.5),
+)
+
+print(headstart_bar)
+```
+
+## Q26 - Sex/Gender
+
+##### Reporting of sex/gender
+
+```{r}
+q26_frequency <- nq26 %>%
+  count(q26) 
+
+gender_report_bar <- 
+  ggplot(q26_frequency, aes(q26, n, fill = q26)) +
+  geom_bar(stat= "identity", show.legend = FALSE) +
+  geom_text(aes(label = n), vjust = -0.5, size = 3) +
+  labs(title = "Studies Reporting of Gender", 
+       subtitle = "No studies reported sex separate from gender",
+       y = "Number of Studies",
+       x ="") +
+  scale_fill_brewer(palette = "Set1") +
+  scale_y_continuous(breaks = c(0,10,20,30,40,50, 60, 70, 80),
+                       limits = c(0,80),
+                       expand = c(0,0))+
+  scale_x_discrete(labels = c("1" = "Authors Described Sex/Gender", 
+                              "2" = "Authors Did Not Describe Sex/Gender",
+                              "3" = "Author Reported Sex Separate from Gender")) +
+  theme(
+  panel.background   = element_blank(),
+  axis.line.x        = element_line(color = "black", linewidth = 0.5),
+  axis.line.y        = element_line(color = "black", linewidth = 0.5),
+)
+
+print(gender_report_bar)
+```
+
+## Q29 - Disability Status
+
+##### Creating Bar Graph for Disability Status
+
+```{r}
+desired_order <- c("1", "2", "3", "4")
+
+q29_frequency <- nq29 %>%
+  count(q29) 
+
+q29_frequency <- q29_frequency %>%
+  mutate(q29 = fct_relevel(q29, desired_order)) %>%
+  mutate(bar_id = as.factor(row_number()))
+
+dis_status_bar <- 
+  ggplot(q29_frequency, aes(q29, n, fill = q29)) +
+  geom_bar(stat= "identity", show.legend = FALSE) +
+  geom_text(aes(label = n), vjust = -0.5, size = 3) +
+  labs(title = "Reporting of Child Disability Status in Articles About SES and OEL", 
+       y = "",
+       x ="") +
+  scale_fill_brewer(palette = "Set1") +
+  scale_x_discrete(labels = c("1" = "Yes - Specified", 
+                              "2" = "Yes - Not Specified",
+                              "3" = "No",
+                              "4" = "Unclear")) +
+  theme(
+  panel.background   = element_blank(),
+  axis.line.x        = element_line(color = "black", linewidth = 0.5),
+                    axis.ticks.y       = element_blank(),  # Remove y-axis ticks
+    axis.text.y        = element_blank(),  
+    axis.line.y        = element_blank())
+
+
+print(dis_status_bar)
+
+```
+
+## Q31 - Immigrant Status
+
+```{r}
+q31_count_5s <- sum(nq31$q31 == 5)
+
+# Calculate the percentage of 5s
+q31_percentage_5s <- (q31_count_5s / nrow(nq31)) * 100
+
+# Print the count and percentage
+cat("Number of 5s:", q31_count_5s, "\n")
+cat("Percentage of 5s:", q31_percentage_5s, "%\n")
+
+
+##### 92% of articles did not specify immigration status
+```
