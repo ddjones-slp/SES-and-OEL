@@ -1,0 +1,474 @@
+---
+title: "Scoping Review: The Intersection of Socioeconomic Status (SES) and Oral Expressive Language Development (OEL)"
+output: 
+  flexdashboard::flex_dashboard:
+    orientation: rows
+    vertical_layout: scroll
+---
+
+```{r setup, include=FALSE}
+library(flexdashboard)
+library(ggplot2)
+library(psych)
+library(ggExtra)
+library(fmsb)
+library(here)
+library(rio)
+library(tidyverse)
+library(janitor)
+library(ggthemes)
+library(gghighlight)
+library(tidyr)
+library(readxl)
+library(RColorBrewer)
+library(knitr)
+library(kableExtra)
+
+```
+
+```{r, eval=TRUE, echo=FALSE}
+
+ndf1 <- read_excel("/Users/daniellejones/Desktop/SES-and-OEL/SES-and-OEL/data/FullDataSESOEL22024.xlsx")
+
+ndf1 <- ndf1 %>%
+  characterize() %>%
+  clean_names()
+
+
+cdf1 <- read_excel("/Users/daniellejones/Desktop/SES-and-OEL/SES-and-OEL/data/FullDataSESOELChoice.xlsx")
+
+cdf1 <- cdf1 %>%
+  characterize() %>%
+  clean_names()
+```
+
+```{r, eval=TRUE, echo=FALSE}
+## Take away question row - numerical data
+## Take away question row - choice data
+ndf2 <- ndf1 %>%
+  slice(-1, ) 
+
+cdf2 <- cdf1 %>%
+  slice(-1, ) 
+```
+
+```{r, eval=TRUE, echo=FALSE}
+## Creating individual data sets for each question - numerical data
+nq2 <- ndf2 %>%
+  select("row_id", "q1", "q2")
+nq3 <- ndf2 %>%
+  select("row_id", "q1", "q3", "q3_44_text")
+nq4 <- ndf2 %>%
+  select("row_id", "q1", "q4")
+nq5 <- ndf2 %>%
+  select("row_id", "q1", "q5")
+nq6 <- ndf2 %>%
+  select("row_id", "q1", "q6", "q6_3_text", "q6a", "q6a_6_text")
+nq7 <- ndf2 %>%
+  select("row_id", "q1", "q7", "q6_3_text")
+nq8 <- ndf2 %>%
+  select("row_id", "q1", "q8", "q8_5_text", "q8_6_text")
+nq9 <- ndf2 %>%
+  select("row_id", "q1", "q9", "q9_3_text", "q9_4_text")
+nq10 <- ndf2 %>%
+  select("row_id", "q1", "q10", "q10_5_text", "q10_west", "q10_midwest", "q10_south", "q10_northeast")
+nq11 <- ndf2 %>%
+  select("row_id", "q1", "q11", "q11_1_text", "q11_3_text")
+nq12 <- ndf2 %>%
+  select("row_id", "q1", "q12", "q12_1_text", "q12_2_text", "q12_3_text", "q12_4_text", "q12_5_text", 
+         "q12_6_text", "q12_7_text", "q12_8_text")
+nq13 <- ndf2 %>%
+  select("row_id", "q1", "q13", "q13_13_text", "q13_14_text", "q13_15_text")
+nq14 <- ndf2 %>%
+  select("row_id", "q1", "q14")
+nq15 <- ndf2 %>%
+  select("row_id", "q1", "q15", "q15_44", "q15_7_text_45", "q15_8_text", "q15_47", "q15_7_text_48",
+         "q15_6_text", "q15_7_text")
+nq16 <- ndf2 %>%
+  select("row_id", "q1", "q16", "q16_1_text", "q16_2_text", "q16_3_text", "q16_4_text", "q16_5_text",
+          "q16_6_text", "q16_7_text", "q16_8_text")
+nq17 <- ndf2 %>%
+  select("row_id", "q1", "q17", "q17_1_text", "q17_2_text", "q17_3_text", "q17_4_text", "q17_5_text",
+          "q17_6_text", "q17_7_text", "q17_8_text")
+nq18 <- ndf2 %>%
+  select("row_id", "q1", "q18", "q18_6_text", "q18_7_text")
+nq19 <- ndf2 %>%
+  select("row_id", "q1", "q19")
+nq20 <- ndf2 %>%
+  select("row_id", "q1", "q20", "q20_6_text")
+nq21 <- ndf2 %>%
+  select("row_id", "q1", "q21")
+nq22 <- ndf2 %>%
+  select("row_id", "q1", "q22", "q22_1_text", "q22_2_text", "q22_3_text", "q22_4_text")
+nq23 <- ndf2 %>%
+  select("row_id", "q1", "q23", "q23_4_text")
+nq24 <- ndf2 %>%
+  select("row_id", "q1", "q24")
+nq25 <- ndf2 %>%
+  select("row_id", "q1", "q25")
+nq26 <- ndf2 %>%
+  select("row_id", "q1", "q26", "q26_b_1_text", "q26_b_2_text", "q26_b_3_text", "q26_b_4_text",
+         "q26_b_5_text", "q26_b_6_text", "q26_b_7_text")
+nq27 <- ndf2 %>%
+  select("row_id", "q1", "q27", "q27_1_text", "q27_6_text")
+nq28 <- ndf2 %>%
+  select("row_id", "q1", "q28", "q28_1_text", "q28_2_text", "q28_3_text", "q28_4_text", "q28_5_text")
+nq29 <- ndf2 %>%
+  select("row_id", "q1", "q29", "q29_1_text", "q29_4_text")
+nq30 <- ndf2 %>%
+  select("row_id", "q1", "q30", "q30_11_text", "q30_12_text", "q30_13_text")
+nq31 <- ndf2 %>%
+  select("row_id", "q1", "q31", "q31_6_text")
+
+```
+
+```{r, eval=TRUE, echo=FALSE}
+## Creating individual data sets for each question - choice data
+cq2 <- cdf2 %>%
+  select("row_id", "q1", "q2")
+cq3 <- cdf2 %>%
+  select("row_id", "q1", "q3", "q3_44_text")
+cq4 <- cdf2 %>%
+  select("row_id", "q1", "q4")
+cq5 <- cdf2 %>%
+  select("row_id", "q1", "q5")
+cq6 <- cdf2 %>%
+  select("row_id", "q1", "q6", "q6_3_text", "q6a", "q6a_6_text")
+cq7 <- cdf2 %>%
+  select("row_id", "q1", "q7", "q6_3_text")
+cq8 <- cdf2 %>%
+  select("row_id", "q1", "q8", "q8_5_text", "q8_6_text")
+cq9 <- cdf2 %>%
+  select("row_id", "q1", "q9", "q9_3_text", "q9_4_text")
+cq10 <- cdf2 %>%
+  select("row_id", "q1", "q10", "q10_5_text", "q10_west", "q10_midwest", "q10_south", "q10_northeast")
+cq11 <- cdf2 %>%
+  select("row_id", "q1", "q11", "q11_1_text", "q11_3_text")
+cq12 <- cdf2 %>%
+  select("row_id", "q1", "q12", "q12_1_text", "q12_2_text", "q12_3_text", "q12_4_text", "q12_5_text", 
+         "q12_6_text", "q12_7_text", "q12_8_text")
+cq13 <- cdf2 %>%
+  select("row_id", "q1", "q13", "q13_13_text", "q13_14_text", "q13_15_text")
+cq14 <- cdf2 %>%
+  select("row_id", "q1", "q14")
+cq15 <- cdf2 %>%
+  select("row_id", "q1", "q15", "q15_44", "q15_7_text_45", "q15_8_text", "q15_47", "q15_7_text_48",
+         "q15_6_text", "q15_7_text")
+cq16 <- cdf2 %>%
+  select("row_id", "q1", "q16", "q16_1_text", "q16_2_text", "q16_3_text", "q16_4_text", "q16_5_text",
+          "q16_6_text", "q16_7_text", "q16_8_text")
+cq17 <- cdf2 %>%
+  select("row_id", "q1", "q17", "q17_1_text", "q17_2_text", "q17_3_text", "q17_4_text", "q17_5_text",
+          "q17_6_text", "q17_7_text", "q17_8_text")
+cq18 <- cdf2 %>%
+  select("row_id", "q1", "q18", "q18_6_text", "q18_7_text")
+cq19 <- cdf2 %>%
+  select("row_id", "q1", "q19")
+cq20 <- cdf2 %>%
+  select("row_id", "q1", "q20", "q20_6_text")
+cq21 <- cdf2 %>%
+  select("row_id", "q1", "q21")
+cq22 <- cdf2 %>%
+  select("row_id", "q1", "q22", "q22_1_text", "q22_2_text", "q22_3_text", "q22_4_text")
+cq23 <- cdf2 %>%
+  select("row_id", "q1", "q23", "q23_4_text")
+cq24 <- cdf2 %>%
+  select("row_id", "q1", "q24")
+cq25 <- cdf2 %>%
+  select("row_id", "q1", "q25")
+cq26 <- cdf2 %>%
+  select("row_id", "q1", "q26", "q26_b_1_text", "q26_b_2_text", "q26_b_3_text", "q26_b_4_text",
+         "q26_b_5_text", "q26_b_6_text", "q26_b_7_text")
+cq27 <- cdf2 %>%
+  select("row_id", "q1", "q27", "q27_1_text", "q27_6_text")
+cq28 <- cdf2 %>%
+  select("row_id", "q1", "q28", "q28_1_text", "q28_2_text", "q28_3_text", "q28_4_text", "q28_5_text")
+cq29 <- cdf2 %>%
+  select("row_id", "q1", "q29", "q29_1_text", "q29_4_text")
+cq30 <- cdf2 %>%
+  select("row_id", "q1", "q30", "q30_11_text", "q30_12_text", "q30_13_text")
+cq31 <- cdf2 %>%
+  select("row_id", "q1", "q31", "q31_6_text")
+
+```
+
+# Main page
+
+Danielle Jones <br> University of Oregon<br> March 2024<br>
+
+**Scoping Review Rationale**
+
+More than 15% of children in the United States live in poverty. Children from low socioeconomic (SES) backgrounds are almost twice as likely to have a disability than children living above the poverty threshold. Children from low SES backgrounds often face early delays in communication development, which can negatively affect their cognitive and emotional development, academic success, and health outcomes throughout the lifespan.
+
+The birth to 5-years-old window has been identified as a crucial time for oral language development. During the periods of infancy and early childhood, children’s brains experience rapid growth and development that lay the foundational framework for their language learning and cognitive capacities. Within this period, children progress from babbling at around 6 months, to uttering their first word around 12 months, and progress to developing a complete speech sound system and constructing complex sentences by the time they reach 5-6 years old. Delays and disorders in communication development are seen in approximately 8% of children in the United States, with language development being impacted by many environmental factors, including SES. For children from low SES backgrounds, delays in language development can be seen as early as 18-months of age. This is concerning as oral expressive language (OEL) proficiencies, such as vocabulary and grammar skills, are reliable predictors of later reading ability and academic achievement, indicating that early deficits in language skills can have a lasting impact on a child’s academic and later life success.
+
+Important abbreviations: <br>
+**Socioeconomic Status (SES)** <br>
+**Oral Expressive Language (SES)**
+
+# Top Journals for SES and OEL
+#### This bar graph depicts the journals that most frequenty published articles about SES and OEL between the years of 1980 - 2023.
+
+## Row
+
+### Final Bar Graph
+##### This looks so much easier to read and much cleaner. The only problem is that the flexdashboard for some reason doesn't show the title of the graph, even though the code has it in there and it runs in R correctly. I'm not sure why?
+
+```{r, eval=TRUE, echo=FALSE}
+##### Table of Publication Frequency by Year
+
+nq3_counts <- nq3 %>%
+  rename(journal = q3) %>%
+  mutate(journal = as.integer(journal)) %>% 
+  group_by(journal) %>%
+  mutate(journal = as.character(journal)) %>%
+  mutate(journal_count = n()) %>%
+  summarise(journal_count =n()) 
+
+top_11_journals <- nq3_counts %>%
+   mutate(journal = factor(journal, 
+                            levels = c("10", 
+                                       "6", 
+                                       "15", 
+                                       "33", 
+                                       "14", 
+                                       "24", 
+                                       "35", 
+                                       "12", 
+                                       "4", 
+                                       "18", 
+                                       "43"),
+                            labels = c("Developmental Psychology", 
+                                       "Child Development", 
+                                       "Early Education and Development", 
+                                       "Journal of Speech, Language, and Hearing Research", 
+                                       "Early Childhood Research Quarterly",
+                                       "Journal of Child Language",
+                                       "Language, Speech, and Hearing Services in Schools",
+                                       "Early Child Development and Care",
+                                       "Applied Pscyholinguistics",
+                                       "Infant and Child Development",
+                                       "Topics in Early Childhood Special Education"
+                                       ))) %>%
+  arrange(desc(journal_count)) %>%
+  head(11)
+```
+
+```{r}
+journal_plot <- ggplot(top_11_journals, aes(x = reorder(journal, journal_count), y = journal_count, fill = journal)) +
+  geom_bar(stat = "identity", show.legend = FALSE) +
+  geom_text(aes(label = journal_count), vjust = .5, color = "black", size = 3, hjust = -1) +  
+  labs(x = "", y = "Number of Articles from 1980 - 2023",
+       title = "Journals with Highest Frequency of Publication of Articles About SES and OEL") +
+  scale_y_continuous(breaks = seq(0, 10, by = 1)) +
+  theme_minimal() +
+  theme(panel.grid = element_blank(),
+        plot.title = element_text(hjust = 3, vjust = -15),
+        axis.ticks.x = element_line(color = "black")) +
+  coord_flip()
+
+print(journal_plot)
+```
+
+## Row
+
+### Second Bar Graph
+##### This started to clean it up a bit but the names of the journals are all squished together. I decided here that I should turn the bar chart on the side so the journal titles were easier to read.
+
+```{r}
+ggplot(top_11_journals, aes(x = reorder(journal, journal_count), y = journal_count, fill = journal)) +
+  geom_bar(stat = "identity", show.legend = FALSE) +
+  geom_text(aes(label = journal_count))+  
+  labs(x = "", y = "Number of Articles from 1980 - 2023",
+       title = "Journals with Highest Frequency of Publication of Articles About SES and OEL") +
+  theme_minimal()
+```
+
+## Row
+
+### Initial Bar Graph
+
+##### My first attempt at creating a bar chart started here. Very messy and confusing, but a good structure to add too.
+
+```{r}
+ggplot(top_11_journals, aes(x = journal, y = journal_count)) +
+  geom_bar(stat = "identity", show.legend = FALSE) +
+  labs(x = "", y = "Number of Articles from 1980 - 2023") +
+  scale_y_continuous(breaks = seq(0, 10, by = 1)) +
+  theme_minimal()
+```
+
+# Article Publication Frequency of SES and OEL
+#### This plot tracks the publication frequency of articles about SES and OEL from 1980 - 2023
+## Row
+
+### Final Line Plot
+##### I aggregated the dates in 5 year increments and you can see the trends much clearer. I also added in an annotation indicating when the seminmal Hart & Risley "30-Million Word Gap" study was published, which shone a spotlight on the intersection of SES and child language development.
+
+```{r, fig.width=10}
+cq2_counts2 <- cq2 %>%
+  rename(year = q2) %>%
+  mutate(year = as.integer(year)) 
+
+cq2_counts2 <- cq2_counts2 %>%
+  mutate(group = cut(year, breaks = seq(1980, 2023, by = 5), labels = FALSE, include.lowest = TRUE)) %>%
+  mutate(group = if_else(is.na(group), 9, group)) %>%
+  group_by(group) %>%
+  summarise(min_year = min(year, na.rm = TRUE),
+            max_year = max(year, na.rm = TRUE),
+            count = n())
+
+custom_labels <- c("1980-1984", "1985-1989", "1990-1994", "1995-1999", "2000-2004", 
+                   "2005-2009", "2010-2014", "2015-2019", "2020-2023")
+
+
+year_plot2 <- ggplot(cq2_counts2, aes(x = as.factor(group), y = count, group = 1)) +
+  geom_point() +
+  geom_line() +
+  scale_x_discrete(labels = custom_labels) +
+  labs(x = "Year Range", y = "Number of Articles", title = "Publication of SES and OEL Articles Over the Years") +
+  theme_minimal() +
+  theme(
+    axis.text.x = element_text(angle = 45, hjust = 1),
+    panel.background = element_blank(),
+    panel.grid.major = element_blank()
+  ) +
+  annotate(geom = "text", x = cq2_counts2$group[3], y = cq2_counts2$count[3] + 1, 
+           label = "Publication of Hart & Risley Article" , color = "red", vjust = -4, hjust =.8) +
+   annotate(
+    geom = "segment",
+    x = cq2_counts2$group[3] - 1,
+    y =  cq2_counts2$count[3] + 4,
+    xend = cq2_counts2$group[3] -.1 ,
+    yend =  cq2_counts2$count[3]  ,
+    arrow = arrow(type = "closed", length = unit(0.2, "centimeter"), angle = -45),
+    color = "red")
+   
+
+print(year_plot2)
+
+
+```
+
+## Row
+
+### Second Line Plot
+##### I liked this plot but I felt like it was too much going on with the individual points. I got feedback from my peers and my instructor to aggregate the dates to make the trend more clear/visible.
+```{r}
+cq2_counts <- cq2 %>%
+  rename(year = q2) %>%
+  mutate(year = as.integer(year))
+
+cq2_year_counts <- cq2_counts %>%
+  group_by(year) %>%
+  mutate(year_count = n()) %>%
+  ungroup()
+
+year_plot <-
+  ggplot(cq2_year_counts, aes(x = year, y = year_count)) +
+  geom_point() + 
+  geom_line() +  
+  scale_x_continuous(breaks = seq(1980, 2023, by = 2)) +
+  scale_y_continuous(breaks = seq(0, 8, by = 1), limits = c(0, NA)) +
+  labs(x = "Year", y = "Number of Articles", title = "Publication of SES and OEL Articles Over the Years") +
+  theme(
+    panel.background = element_blank())
+print(year_plot)
+
+```
+
+## Row
+
+### Initial Line Plot
+##### This first attempt again was just to put the scaffolding of the code in to make sure it was built the way I wanted it.
+
+```{r}
+cq2_counts <- cq2 %>%
+  rename(year = q2) %>%
+  mutate(year = as.integer(year))
+
+cq2_year_counts <- cq2_counts %>%
+  group_by(year) %>%
+  mutate(year_count = n()) %>%
+  ungroup()
+
+
+  ggplot(cq2_year_counts, aes(x = year, y = year_count)) +
+  geom_point() + 
+  geom_line() 
+```
+
+# Reporting of Disability Status
+#### This bar graph shows how often researchers provided information on their participants' disability status in the articles included in the scoping review. What is most interesting is that while researchers did indicate that their participants had a disability, the overwhelming majority of researchers did not indicate what kind of disability their participants had. This means that the majority of articles published about SES and OEL had the confounding factor of disability!
+## Row
+
+### Final Bar Plot
+##### This bar plot is cleaner, much easier to read, and correctly represents my data.
+```{r}
+desired_order <- c("1", "2", "3", "4")
+
+q29_frequency <- nq29 %>%
+  count(q29) 
+
+q29_frequency <- q29_frequency %>%
+  mutate(q29 = fct_relevel(q29, desired_order)) %>%
+  mutate(bar_id = as.factor(row_number()))
+
+dis_status_bar <- 
+  ggplot(q29_frequency, aes(q29, n, fill = q29)) +
+  geom_bar(stat= "identity", show.legend = FALSE) +
+  geom_text(aes(label = n), vjust = -0.5, size = 3) +
+  labs(title = "Reporting of Child Disability Status in Articles About SES and OEL", 
+       y = "",
+       x ="") +
+  scale_fill_brewer(palette = "Set1") +
+  scale_x_discrete(labels = c("1" = "Yes - Specified", 
+                              "2" = "Yes - Not Specified",
+                              "3" = "No",
+                              "4" = "Unclear")) +
+  theme(
+  panel.background   = element_blank(),
+  axis.line.x        = element_line(color = "black", linewidth = 0.5),
+                    axis.ticks.y       = element_blank(), 
+    axis.text.y        = element_blank(),  
+    axis.line.y        = element_blank())
+
+
+print(dis_status_bar)
+
+```
+
+## Row
+
+### Second Bar Plot
+
+##### This is much better but I realized that my labels were misleading/didn't represent my data correctly. I also didn't like the gray background and the gridlines.
+
+```{r}
+  ggplot(q29_frequency, aes(q29, n, fill = q29)) +
+  geom_bar(stat= "identity", show.legend = FALSE) +
+  geom_text(aes(label = n), vjust = -0.5, size = 3) +
+  labs(title = "Reporting of Child Disability Status in Articles About SES and OEL", 
+       y = "",
+       x ="") +
+  scale_fill_brewer(palette = "Set1") +
+  scale_x_discrete(labels = c("1" = "Yes", 
+                              "2" = "Not Specified",
+                              "3" = "No",
+                              "4" = "Unclear"))
+```
+
+## Row
+
+### Initial Bar Plot
+
+##### With this plot I was just trying to get the bones of the code together. It came out incomprehensible.
+
+```{r}
+ 
+  ggplot(q29_frequency, aes(q29, n, fill = q29)) +
+  geom_bar(stat= "identity", show.legend = FALSE) +
+  geom_text(aes(label = n), vjust = -0.5, size = 3)
+
+
+```
